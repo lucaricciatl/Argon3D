@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create3D Studio - Transform Ideas into 3D Reality</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/OrbitControls.js"></script>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button id="theme-toggle-btn" class="theme-btn">🌙</button>
+    </div>
+
+    <!-- Landing Page -->
+    <section id="landing" class="landing">
+        <div class="hero-background">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+            </div>
+        </div>
+        
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Create3D Studio</h1>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn--outline" onclick="showLogin()">Login</button>
+                <button class="btn btn--primary" onclick="showRegister()">Get Started</button>
+            </div>
+        </nav>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Transform Your Ideas Into <span class="gradient-text">3D Reality</span></h1>
+                <p class="hero-subtitle">Create stunning 3D models from text prompts or images using cutting-edge AI technology. Your imagination is the only limit.</p>
+                <div class="hero-actions">
+                    <button class="btn btn--primary btn--lg" onclick="showRegister()">Start Creating</button>
+                    <button class="btn btn--outline btn--lg" onclick="showDemo()">View Demo</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-3d-preview">
+                    <img src="https://pplx-res.cloudinary.com/image/upload/v1749561529/pplx_project_search_images/6e73e6058697e506d9441d7a7f1ff10f77b162eb.jpg" alt="Text to 3D Model">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome Back</h2>
+                <button class="close-btn" onclick="closeModal('login-modal')">&times;</button>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="login-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                <p class="auth-switch">Don't have an account? <a href="#" onclick="showRegister()">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join Create3D Studio</h2>
+                <button class="close-btn" onclick="closeModal('register-modal')">&times;</button>
+            </div>
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="register-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="register-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="register-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Create Account</button>
+                <p class="auth-switch">Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="dashboard hidden">
+        <nav class="dashboard-nav">
+            <div class="nav-brand">
+                <h1>Create3D Studio</h1>
+            </div>
+            <div class="nav-user">
+                <span id="user-name">User</span>
+                <button class="btn btn--outline btn--sm" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-content">
+            <div class="dashboard-sidebar">
+                <div class="sidebar-menu">
+                    <button class="menu-item active" onclick="showSection('generate')">
+                        <span>🎨</span> Generate
+                    </button>
+                    <button class="menu-item" onclick="showSection('library')">
+                        <span>📚</span> Library
+                    </button>
+                    <button class="menu-item" onclick="showSection('viewer')">
+                        <span>👁️</span> Viewer
+                    </button>
+                </div>
+            </div>
+
+            <div class="dashboard-main">
+                <!-- Generate Section -->
+                <div id="generate-section" class="section">
+                    <div class="section-header">
+                        <h2>Generate 3D Models</h2>
+                        <p>Transform your ideas into stunning 3D models</p>
+                    </div>
+
+                    <div class="generate-options">
+                        <div class="option-card active" onclick="selectGenerationType('text')">
+                            <div class="option-icon">📝</div>
+                            <h3>Text to 3D</h3>
+                            <p>Describe what you want to create</p>
+                        </div>
+                        <div class="option-card" onclick="selectGenerationType('image')">
+                            <div class="option-icon">🖼️</div>
+                            <h3>Image to 3D</h3>
+                            <p>Upload an image to convert</p>
+                        </div>
+                    </div>
+
+                    <div class="generate-form">
+                        <div id="text-input" class="input-section">
+                            <div class="form-group">
+                                <label class="form-label">Describe your 3D model</label>
+                                <textarea id="text-prompt" class="form-control" placeholder="A futuristic robot with glowing blue eyes..." rows="4"></textarea>
+                            </div>
+                            <div class="prompt-suggestions">
+                                <p>Try these prompts:</p>
+                                <div class="suggestion-tags" id="suggestion-tags"></div>
+                            </div>
+                        </div>
+
+                        <div id="image-input" class="input-section hidden">
+                            <div class="form-group">
+                                <label class="form-label">Upload Image</label>
+                                <div class="file-upload">
+                                    <input type="file" id="image-file" accept="image/*" class="file-input">
+                                    <div class="file-upload-area">
+                                        <div class="upload-icon">📁</div>
+                                        <p>Click to upload or drag and drop</p>
+                                        <span>PNG, JPG, WEBP up to 10MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="generation-controls">
+                            <div class="format-selection">
+                                <label class="form-label">Output Format</label>
+                                <select id="output-format" class="form-control">
+                                    <option value="GLB">GLB - Web optimized</option>
+                                    <option value="OBJ">OBJ - Universal format</option>
+                                    <option value="STL">STL - 3D printing</option>
+                                    <option value="GLTF">GLTF - JSON based</option>
+                                </select>
+                            </div>
+                            <button class="btn btn--primary btn--lg" onclick="generateModel()">
+                                <span id="generate-btn-text">Generate 3D Model</span>
+                                <div id="generate-loader" class="loader hidden"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Library Section -->
+                <div id="library-section" class="section hidden">
+                    <div class="section-header">
+                        <h2>Your 3D Models</h2>
+                        <p>Manage your personal collection</p>
+                    </div>
+                    <div class="library-grid" id="library-grid"></div>
+                </div>
+
+                <!-- Viewer Section -->
+                <div id="viewer-section" class="section hidden">
+                    <div class="section-header">
+                        <h2>3D Model Viewer</h2>
+                        <p>Interactive 3D model preview</p>
+                    </div>
+                    <div class="viewer-container">
+                        <div class="viewer-canvas" id="viewer-canvas"></div>
+                        <div class="viewer-controls">
+                            <div class="model-info" id="model-info">
+                                <h3>Model Information</h3>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <span class="info-label">Name:</span>
+                                        <span class="info-value" id="model-name">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Format:</span>
+                                        <span class="info-value" id="model-format">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Vertices:</span>
+                                        <span class="info-value" id="model-vertices">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Faces:</span>
+                                        <span class="info-value" id="model-faces">-</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Size:</span>
+                                        <span class="info-value" id="model-size">-</span>
+                                    </div>
+                                </div>
+                                <div class="viewer-actions">
+                                    <button class="btn btn--primary" onclick="downloadModel()">Download</button>
+                                    <button class="btn btn--outline" onclick="resetCamera()">Reset View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generation Progress Modal -->
+    <div id="progress-modal" class="modal">
+        <div class="modal-content progress-modal">
+            <div class="progress-header">
+                <h2>Generating 3D Model</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p id="progress-text">Initializing...</p>
+            </div>
+            <div class="progress-animation">
+                <div class="progress-cube"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content success-modal">
+            <div class="success-icon">✅</div>
+            <h2>Model Generated Successfully!</h2>
+            <p>Your 3D model has been created and added to your library.</p>
+            <div class="success-actions">
+                <button class="btn btn--primary" onclick="viewGeneratedModel()">View Model</button>
+                <button class="btn btn--outline" onclick="closeModal('success-modal')">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
